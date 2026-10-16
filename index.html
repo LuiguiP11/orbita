@@ -34,16 +34,13 @@ header{display:flex;justify-content:space-between;align-items:center;padding:10p
 .btn-back:active{transform:scale(.9)}
 
 /* CHAT FLOTANTE */
-.chat-float{
-  position:fixed;bottom:20px;right:20px;z-index:100;
-}
+.chat-float{position:fixed;bottom:20px;right:20px;z-index:100}
 .chat-float-btn{
   width:60px;height:60px;border-radius:50%;
   background:linear-gradient(135deg,var(--rose),var(--lav));
   color:#2b1035;font-size:28px;
   box-shadow:0 8px 24px rgba(255,143,171,0.4);
-  display:grid;place-items:center;
-  transition:all .3s;position:relative;
+  display:grid;place-items:center;transition:all .3s;position:relative;
 }
 .chat-float-btn:active{transform:scale(.9)}
 .chat-float-btn.has-new{animation:pulse 2s infinite}
@@ -52,21 +49,17 @@ header{display:flex;justify-content:space-between;align-items:center;padding:10p
   position:absolute;top:-5px;right:-5px;
   width:24px;height:24px;border-radius:50%;
   background:var(--gold);color:#2b1035;
-  font-size:12px;font-weight:700;
-  display:grid;place-items:center;
+  font-size:12px;font-weight:700;display:grid;place-items:center;
 }
 
 .chat-panel{
   position:fixed;bottom:0;left:0;right:0;
   background:linear-gradient(180deg,#2c183c,#1e102c);
-  border-radius:28px 28px 0 0;
-  padding:20px;
+  border-radius:28px 28px 0 0;padding:20px;
   transform:translateY(calc(100% - 80px));
-  transition:transform .3s;
-  z-index:99;
+  transition:transform .3s;z-index:99;
   box-shadow:0 -10px 40px rgba(0,0,0,0.5);
-  max-height:70vh;
-  display:flex;flex-direction:column;
+  max-height:70vh;display:flex;flex-direction:column;
 }
 .chat-panel.open{transform:translateY(0)}
 .chat-panel-header{
@@ -75,24 +68,15 @@ header{display:flex;justify-content:space-between;align-items:center;padding:10p
 }
 .chat-panel-header h3{font-size:18px}
 .chat-panel-close{font-size:24px;opacity:.6}
-.chat-messages{
-  flex:1;overflow-y:auto;max-height:35vh;
-  padding:10px 0;display:flex;flex-direction:column;gap:10px;
-}
+.chat-messages{flex:1;overflow-y:auto;max-height:35vh;padding:10px 0;display:flex;flex-direction:column;gap:10px}
 .msg{max-width:85%;padding:12px 16px;border-radius:18px;font-size:14px;position:relative;animation:slideIn .3s}
 @keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .msg.me{align-self:flex-end;background:linear-gradient(135deg,var(--rose),var(--lav));color:#2b1035}
 .msg.them{align-self:flex-start;background:var(--card);border:1px solid var(--border)}
 .msg .time{font-size:9px;opacity:.6;margin-top:4px;display:block}
 .chat-input-area{display:flex;gap:10px;padding-top:15px}
-.chat-input-area input{
-  flex:1;padding:14px;border-radius:25px;
-  background:rgba(0,0,0,0.3);border:1px solid var(--border);color:white;
-}
-.chat-input-area button{
-  width:50px;height:50px;border-radius:50%;
-  background:var(--rose);color:#2b1035;font-size:20px;
-}
+.chat-input-area input{flex:1;padding:14px;border-radius:25px;background:rgba(0,0,0,0.3);border:1px solid var(--border);color:white}
+.chat-input-area button{width:50px;height:50px;border-radius:50%;background:var(--rose);color:#2b1035;font-size:20px}
 
 /* LOGIN */
 .login-screen{min-height:85vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
@@ -123,11 +107,7 @@ header{display:flex;justify-content:space-between;align-items:center;padding:10p
 .room-badge b{color:var(--gold);font-family:'Fraunces',serif;font-size:16px}
 
 .games-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:20px}
-.game-card{
-  padding:20px 15px;border-radius:20px;
-  background:var(--card);border:1px solid var(--border);
-  text-align:left;transition:all .3s;
-}
+.game-card{padding:20px 15px;border-radius:20px;background:var(--card);border:1px solid var(--border);text-align:left;transition:all .3s}
 .game-card:active{transform:scale(.95)}
 .game-card .icon{font-size:36px;margin-bottom:12px}
 .game-card h3{font-size:16px;margin-bottom:6px}
@@ -163,28 +143,55 @@ header{display:flex;justify-content:space-between;align-items:center;padding:10p
 .vaso .pct{font-family:'Fraunces',serif;font-size:20px;margin:8px 0}
 .vaso input[type=range]{width:100%;accent-color:var(--c)}
 
+/* ANÁLISIS */
+.analysis-card{
+  background:linear-gradient(135deg,rgba(255,143,171,0.1),rgba(201,167,255,0.1));
+  border:1px solid rgba(255,143,171,0.3);
+  border-radius:20px;padding:25px;margin-bottom:20px;
+}
+.analysis-card .header{text-align:center;margin-bottom:20px}
+.analysis-card .header .icon{font-size:48px;margin-bottom:10px}
+.analysis-card .header h3{font-size:22px;color:var(--gold);margin-bottom:8px}
+.analysis-card .header p{font-size:14px;color:#c3aecd}
+
+.insight-box{
+  background:rgba(0,0,0,0.2);border-radius:16px;padding:18px;margin-bottom:15px;
+  border-left:4px solid var(--rose);
+}
+.insight-box h4{font-size:14px;color:var(--gold);margin-bottom:8px;text-transform:uppercase;letter-spacing:.1em}
+.insight-box p{font-size:14px;line-height:1.6;color:#fff5fa}
+
+.next-level{
+  background:linear-gradient(135deg,rgba(143,227,192,0.15),rgba(143,227,192,0.05));
+  border:1px solid rgba(143,227,192,0.3);
+  border-radius:16px;padding:18px;margin-bottom:15px;
+}
+.next-level h4{font-size:14px;color:var(--mint);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.next-level h4::before{content:'🚀';font-size:18px}
+.next-level ul{list-style:none;padding:0}
+.next-level li{
+  font-size:13px;line-height:1.6;color:#fff5fa;
+  padding:8px 0 8px 24px;position:relative;
+}
+.next-level li::before{
+  content:'✓';position:absolute;left:0;color:var(--mint);font-weight:700;
+}
+
+.share-analysis{
+  background:rgba(255,255,255,0.05);border-radius:16px;padding:15px;
+  text-align:center;margin-top:20px;
+}
+.share-analysis p{font-size:13px;color:#c3aecd;margin-bottom:12px}
+
 /* RESULTADOS COMPARTIDOS */
-.results-compare{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:20px;padding:20px;margin-bottom:20px;
-}
+.results-compare{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;margin-bottom:20px}
 .results-compare h3{text-align:center;font-size:20px;margin-bottom:20px;color:var(--gold)}
-.player-results{
-  display:flex;gap:15px;margin-bottom:15px;padding:15px;
-  border-radius:16px;background:rgba(255,255,255,0.05);
-}
+.player-results{display:flex;gap:15px;margin-bottom:15px;padding:15px;border-radius:16px;background:rgba(255,255,255,0.05)}
 .player-results.me{border:2px solid var(--rose)}
 .player-results.them{border:2px solid var(--lav)}
-.player-results .player-name{
-  font-size:12px;color:var(--gold);text-transform:uppercase;
-  letter-spacing:.1em;margin-bottom:10px;font-weight:700;
-}
+.player-results .player-name{font-size:12px;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;font-weight:700}
 .player-results .scores{display:flex;flex-direction:column;gap:8px;flex:1}
-.score-item{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.05);
-  font-size:13px;
-}
+.score-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.05);font-size:13px}
 .score-item .label{color:#c3aecd}
 .score-item .value{font-weight:700;color:var(--rose)}
 
@@ -260,7 +267,6 @@ header{display:flex;justify-content:space-between;align-items:center;padding:10p
   <main id="view"></main>
 </div>
 
-<!-- CHAT FLOTANTE -->
 <div class="chat-float">
   <button class="chat-float-btn" id="chatFloatBtn" onclick="toggleChatPanel()">
     💬
@@ -300,10 +306,7 @@ function closeModal(){$('#modal').classList.remove('open');}
 function toggleChatPanel(){
   chatOpen=!chatOpen;
   $('#chatPanel').classList.toggle('open',chatOpen);
-  if(chatOpen){
-    unreadMsgs=0;updateChatBadge();
-    $('#chatInput').focus();
-  }
+  if(chatOpen){unreadMsgs=0;updateChatBadge();$('#chatInput').focus();}
 }
 
 function updateChatBadge(){
@@ -312,16 +315,14 @@ function updateChatBadge(){
   else{badge.style.display='none';$('#chatFloatBtn').classList.remove('has-new');}
 }
 
-// Partículas
 const particles=$('#particles');
 for(let i=0;i<20;i++){
   const p=document.createElement('div');p.className='particle';
-  p.textContent=['♡','','⭐','💫'][Math.floor(Math.random()*4)];
+  p.textContent=['♡','✦','⭐','💫'][Math.floor(Math.random()*4)];
   p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;font-size:${15+Math.random()*20}px;color:${['#ff8fab','#c9a7ff','#ffd9a0','#8fe3c0'][Math.floor(Math.random()*4)]};animation-delay:${Math.random()*20}s;animation-duration:${15+Math.random()*15}s`;
   particles.appendChild(p);
 }
 
-// LOGIN
 function renderLogin(){
   currentUser=null;currentRoom=null;
   if(chatChannel){chatChannel.unsubscribe();chatChannel=null;}
@@ -339,7 +340,6 @@ function renderLogin(){
 }
 function loginAs(who){currentUser=who;toast(`Bienvenido/a, ${who==='bb'?'BB':'Papi'} 💕`);renderRoomChoice();}
 
-// ROOM CHOICE
 function renderRoomChoice(){
   setHeader(`<button class="btn-back" onclick="renderLogin()">←</button>`);
   show(`
@@ -360,7 +360,6 @@ async function createRoom(){
   currentRoom=data;
   await joinChat(code);
   await updatePlayer();
-  // Entrar inmediatamente al home, no esperar
   renderHome();
   notify(`Sala ${code} creada. Comparte el código con ${currentUser==='bb'?'Papi':'BB'}`);
 }
@@ -397,25 +396,16 @@ async function updatePlayer(){
 async function joinChat(code){
   if(chatChannel) await chatChannel.unsubscribe();
   chatChannel = sb.channel(`chat-${code}`)
-    .on('broadcast', { event: 'msg' }, (payload) => {
-      receiveMsg(payload.payload);
-    })
-    .on('presence',{event:'sync'},()=>{
-      checkPartnerPresence();
-    })
-    .subscribe((status) => {
-      if(status === 'SUBSCRIBED'){
-        console.log('Chat conectado');
-        checkPartnerPresence();
-      }
-    });
+    .on('broadcast', { event: 'msg' }, (payload) => {receiveMsg(payload.payload);})
+    .on('presence',{event:'sync'},()=>{checkPartnerPresence();})
+    .subscribe((status) => {if(status === 'SUBSCRIBED') checkPartnerPresence();});
 }
 
 function checkPartnerPresence(){
   if(!currentRoom)return;
   const partner=currentUser==='bb'?currentRoom.player_b:currentRoom.player_a;
   if(partner && !partnerNotified){
-    notify(`${partner.name} se ha conectado `);
+    notify(`${partner.name} se ha conectado 💕`);
     partnerNotified=true;
   }
 }
@@ -425,7 +415,7 @@ function renderHome(){
   if(!currentRoom){renderLogin();return;}
   setHeader(`<button class="btn-back" onclick="renderLogin()">🚪</button>`);
   const name=currentUser==='bb'?'BB':'Papi';
-  const emoji=currentUser==='bb'?'💗':'💙';
+  const emoji=currentUser==='bb'?'':'💙';
   const partnerName=currentUser==='bb'?'Papi':'BB';
   $('#chatPartnerName').textContent=partnerName;
   show(`
@@ -449,7 +439,6 @@ function renderHome(){
   `);
 }
 
-// CHAT
 function sendMsg(){
   const input=$('#chatInput');
   const text=input.value.trim();
@@ -500,7 +489,7 @@ function vasosFill(){
   vasoAnswers={};
   show(`
     <div class="game-screen">
-      <div class="game-header"><h2> Vasos del Amor</h2></div>
+      <div class="game-header"><h2>🥂 Vasos del Amor</h2></div>
       <div class="game-content">
         <div class="vasos-grid">
           ${QUALITIES.map((q,i)=>`
@@ -530,7 +519,7 @@ async function sendVasos(){
   if(currentUser==='bb')update.player_a={vasos:vasoAnswers};
   else update.player_b={vasos:vasoAnswers};
   await sb.from('rooms').update(update).eq('room_code',currentRoom.room_code);
-  toast('Respuestas enviadas. Esperando a tu pareja... ');
+  toast('Respuestas enviadas. Esperando a tu pareja... ⏳');
   checkVasosResults();
 }
 
@@ -552,6 +541,24 @@ function showVasosResults(){
   const nameA=currentUser==='bb'?'BB':'Papi';
   const nameB=currentUser==='bb'?'Papi':'BB';
   
+  // Calcular promedio y diferencias
+  let totalA=0,totalB=0;
+  QUALITIES.forEach(q=>{totalA+=(A[q.n]||50);totalB+=(B[q.n]||50);});
+  const avgA=Math.round(totalA/QUALITIES.length);
+  const avgB=Math.round(totalB/QUALITIES.length);
+  
+  // Encontrar fortalezas y áreas de mejora
+  const strengths=[],improvements=[];
+  QUALITIES.forEach(q=>{
+    const a=A[q.n]||50,b=B[q.n]||50;
+    const avg=(a+b)/2;
+    if(avg>=75)strengths.push({q,avg});
+    else if(avg<60)improvements.push({q,avg});
+  });
+  
+  // Generar análisis
+  const analysis=generateVasosAnalysis(avgA,avgB,strengths,improvements,nameA,nameB);
+  
   show(`
     <div class="game-screen">
       <div class="game-header"><h2>🥂 Vasos del Amor - Resultados</h2></div>
@@ -560,27 +567,102 @@ function showVasosResults(){
           <h3>Comparación de resultados</h3>
           
           <div class="player-results me">
-            <div class="player-name">${nameA} (Tú)</div>
+            <div class="player-name">${nameA} (Tú) - Promedio: ${avgA}%</div>
             <div class="scores">
               ${QUALITIES.map(q=>`<div class="score-item"><span class="label">${q.n}</span><span class="value">${A[q.n]||50}%</span></div>`).join('')}
             </div>
           </div>
           
           <div class="player-results them">
-            <div class="player-name">${nameB}</div>
+            <div class="player-name">${nameB} - Promedio: ${avgB}%</div>
             <div class="scores">
               ${QUALITIES.map(q=>`<div class="score-item"><span class="label">${q.n}</span><span class="value">${B[q.n]||50}%</span></div>`).join('')}
             </div>
           </div>
         </div>
         
-        <p style="text-align:center;color:#c3aecd;font-size:14px;margin-bottom:20px">💬 Usa el chat para comentar los resultados</p>
+        <div class="analysis-card">
+          <div class="header">
+            <div class="icon">✨</div>
+            <h3>${analysis.title}</h3>
+            <p>${analysis.subtitle}</p>
+          </div>
+          
+          <div class="insight-box">
+            <h4>💡 Lo que nos dice esto</h4>
+            <p>${analysis.insight}</p>
+          </div>
+          
+          <div class="next-level">
+            <h4>Cómo llevarlo al siguiente nivel</h4>
+            <ul>
+              ${analysis.actions.map(a=>`<li>${a}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+        
+        <div class="share-analysis">
+          <p>💬 Compartan sus thoughts en el chat y acuerden un plan juntos</p>
+        </div>
         
         <button class="btn-primary" onclick="startVasos()">Jugar otra vez</button>
         <button class="btn-secondary" onclick="renderHome()">Volver al inicio</button>
       </div>
     </div>
   `);
+}
+
+function generateVasosAnalysis(avgA,avgB,strengths,improvements,nameA,nameB){
+  const overallAvg=Math.round((avgA+avgB)/2);
+  
+  let title,subtitle,insight,actions=[];
+  
+  if(overallAvg>=80){
+    title='¡Están en sintonía total! 💫';
+    subtitle='Su conexión es profunda y mutua';
+    insight=`Ambos sienten que se dan mucho el uno al otro. Esto es hermoso, pero incluso las mejores relaciones tienen espacio para crecer. El "siguiente nivel" no es dar más cantidad, sino más intencionalidad.`;
+    actions=[
+      'Practiquen la "gratitud activa": cada noche, díganse 1 cosa específica que agradecen del otro',
+      'Sorpéndanse: no asuman que el otro "ya sabe". Expresen el cariño de formas nuevas',
+      'Establezcan un ritual semanal: 30 minutos sin celulares, solo para conectar',
+      'Pregúntense: "¿Qué puedo hacer esta semana para que te sientas aún más amado/a?"'
+    ];
+  }else if(overallAvg>=60){
+    title='Buena base, hay potencial 🌱';
+    subtitle='Se quieren, pero pueden profundizar más';
+    insight=`Hay amor y conexión, pero algunas áreas necesitan más atención. No es que falte amor, es que a veces el día a día nos desconecta. El "siguiente nivel" es ser más intencionales.`;
+    actions=[
+      'Identifiquen juntos las 2 cualidades más bajas y acuerden 1 acción concreta para cada una',
+      'Practiquen "check-ins" diarios: 5 minutos al día para preguntarse "¿Cómo estás realmente?"',
+      'No asuman: si necesitan más paciencia o escucha, díganlo con amor y claridad',
+      'Celebren las pequeñas mejoras: reconozcan cuando el otro hace un esfuerzo'
+    ];
+  }else{
+    title='Momento de reconectar 💛';
+    subtitle='Hay señales de que necesitan más atención mutua';
+    insight=`Los números muestran que ambos sienten que falta algo. Esto no es malo, es una oportunidad. Toda relación pasa por etapas así. Lo importante es que están aquí, dispuestos a mirar y mejorar.`;
+    actions=[
+      'Tengan una conversación honesta sin culpas: "¿Qué necesitamos el uno del otro?"',
+      'Empiecen pequeño: elijan UNA cualidad para trabajar esta semana',
+      'Consideren si hay factores externos (estrés, trabajo) que estén afectando la relación',
+      'Recuerden por qué eligieron estar juntos: escriban 3 razones y compártanlas',
+      'Si sienten que necesitan ayuda, buscar un terapeuta de pareja es un acto de amor, no de debilidad'
+    ];
+  }
+  
+  // Agregar acciones específicas basadas en fortalezas
+  if(strengths.length>0){
+    const topStrength=strengths.sort((a,b)=>b.avg-a.avg)[0];
+    actions.unshift(`Fortaleza: ${topStrength.q.n} - Mantengan esto vivo reconociéndolo mutuamente`);
+  }
+  
+  // Agregar acciones basadas en áreas de mejora
+  if(improvements.length>0){
+    const lowestImprovement=improvements.sort((a,b)=>a.avg-b.avg)[0];
+    actions.push(`Área de crecimiento: ${lowestImprovement.q.n} - Acuerden 1 gesto concreto esta semana`);
+  }
+  
+  return {title,subtitle,insight,actions};
 }
 
 // TRIVIA
@@ -600,9 +682,7 @@ function startTrivia(){
 }
 
 function renderTriviaQuestion(){
-  if(triviaState.idx>=triviaState.questions.length){
-    triviaResult();return;
-  }
+  if(triviaState.idx>=triviaState.questions.length){triviaResult();return;}
   const q=triviaState.questions[triviaState.idx];
   triviaState.picked=null;
   show(`
@@ -639,16 +719,78 @@ function nextTrivia(){
 
 function triviaResult(){
   const correct=triviaState.answers.filter(a=>a.index===0).length;
+  const percentage=Math.round((correct/triviaState.questions.length)*100);
+  
+  let analysis={};
+  if(percentage>=80){
+    analysis={
+      title:'¡Se leen la mente! 🧠✨',
+      subtitle:'Se conocen profundamente',
+      insight:'Pocas parejas llegan a este nivel de conexión. Se conocen en lo superficial y en lo profundo. El "siguiente nivel" es mantener esta curiosidad viva con el tiempo.',
+      actions:[
+        'Sigan haciéndose preguntas nuevas: la persona que aman sigue cambiando y creciendo',
+        'Sorpréndanse: planifiquen algo que el otro no espere basándose en lo que saben de él/ella',
+        'Enseñen a otros: si tienen amigos, ayúdenlos a conectar así de profundo'
+      ]
+    };
+  }else if(percentage>=60){
+    analysis={
+      title:'Buena conexión, hay más por descubrir 💗',
+      subtitle:'Se conocen bien, pero no completamente',
+      insight:'Conocen lo importante, pero hay capas más profundas por explorar. A veces asumimos que sabemos todo del otro, pero siempre hay algo nuevo.',
+      actions:[
+        'Hagan el juego de Verdad más seguido: las preguntas profundas revelan capas ocultas',
+        'Pregúntense "¿Qué no te he contado aún?" y escuchen sin juzgar',
+        'Observen: a veces las acciones dicen más que las palabras sobre lo que el otro necesita'
+      ]
+    };
+  }else{
+    analysis={
+      title:'Tiempo de conocerse más 🌱',
+      subtitle:'Hay mucho por descubrir el uno del otro',
+      insight:'No es que no se quieran, es que quizás han estado en "modo automático". Toda relación necesita momentos de conexión intencional para profundizar.',
+      actions:[
+        'Dediquen 15 minutos al día a conversaciones sin distracciones (sin celulares)',
+        'Usen el juego de Verdad como ritual semanal: 1 pregunta profunda cada vez',
+        'Pregúntense sobre sueños, miedos, infancia: las capas profundas crean intimidad real',
+        'No se frustren: conocer a alguien es un viaje de toda la vida'
+      ]
+    };
+  }
+  
   show(`
     <div class="game-screen">
       <div class="game-header"><h2>🧠 Trivia - Resultados</h2></div>
       <div class="game-content">
         <div class="card center">
-          <div style="font-size:64px;margin-bottom:20px"></div>
-          <h3 style="font-size:28px;margin-bottom:12px">${correct}/${triviaState.questions.length} correctas</h3>
-          <p style="color:#c3aecd;font-size:14px;margin-bottom:20px">${correct>=3?'¡Se conocen muy bien! 💕':'¡Sigan practicando! '}</p>
+          <div style="font-size:64px;margin-bottom:20px">🎯</div>
+          <h3 style="font-size:28px;margin-bottom:12px">${correct}/${triviaState.questions.length} correctas (${percentage}%)</h3>
         </div>
-        <p style="text-align:center;color:#c3aecd;font-size:14px;margin-bottom:20px">💬 Comenten los resultados en el chat</p>
+        
+        <div class="analysis-card">
+          <div class="header">
+            <div class="icon">✨</div>
+            <h3>${analysis.title}</h3>
+            <p>${analysis.subtitle}</p>
+          </div>
+          
+          <div class="insight-box">
+            <h4>💡 Lo que nos dice esto</h4>
+            <p>${analysis.insight}</p>
+          </div>
+          
+          <div class="next-level">
+            <h4>Cómo llevarlo al siguiente nivel</h4>
+            <ul>
+              ${analysis.actions.map(a=>`<li>${a}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+        
+        <div class="share-analysis">
+          <p>💬 Comenten los resultados en el chat y acuerden cómo profundizar más</p>
+        </div>
+        
         <button class="btn-primary" onclick="startTrivia()">Otra ronda</button>
         <button class="btn-secondary" onclick="renderHome()">Volver al inicio</button>
       </div>
@@ -694,7 +836,7 @@ function startVerdad(){
 // RETO
 const RETOS=[
   {i:'🎙️',t:'Envíale un audio de 30 segundos diciéndole tres cosas que admiras.'},
-  {i:'',t:'Mándale la foto de un momento de hoy que te hizo sonreír.'},
+  {i:'📸',t:'Mándale la foto de un momento de hoy que te hizo sonreír.'},
   {i:'💌',t:'Escribe: «Hoy me di cuenta de que te quiero cuando…». Envíasela.'}
 ];
 
