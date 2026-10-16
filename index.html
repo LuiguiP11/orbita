@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuestra Órbita 💫</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --rose:#ff8fab;--lav:#c9a7ff;--gold:#ffd9a0;--mint:#8fe3c0;
+  --bg:#1a0f2e;--card:rgba(255,255,255,0.08);--border:rgba(255,255,255,0.15);
+}
+body{
+  font-family:'Quicksand',sans-serif;color:#fff5fa;
+  background:linear-gradient(135deg,#1a0f2e 0%,#2d1b4e 50%,#1a0f2e 100%);
+  min-height:100vh;overflow-x:hidden;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:600}
+
+.app{max-width:480px;margin:0 auto;padding:20px;position:relative;z-index:1}
+
+/* Partículas de fondo */
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.particle{position:absolute;opacity:0.3;animation:float 20s infinite}
+@keyframes float{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-100px) rotate(180deg)}
+}
+
+/* Header */
+header{display:flex;justify-content:space-between;align-items:center;padding:10px 0 20px}
+.logo{font-family:'Fraunces',serif;font-style:italic;font-size:22px;display:flex;align-items:center;gap:8px}
+.logo::before{content:'✦';color:var(--rose);animation:spin 8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-back{width:40px;height:40px;border-radius:12px;background:var(--card);border:1px solid var(--border);font-size:18px;transition:all .2s}
+.btn-back:active{transform:scale(.9)}
+
+/* Login */
+.login-screen{min-height:85vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.login-screen h1{font-size:48px;margin-bottom:12px;line-height:1.1}
+.login-screen h1 em{font-style:italic;color:var(--rose)}
+.login-screen p{color:#c3aecd;margin-bottom:50px;font-size:14px}
+.avatars{display:flex;gap:30px}
+.avatar-btn{
+  width:140px;height:140px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  border:3px solid rgba(255,255,255,0.2);
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.avatar-btn::before{
+  content:'';position:absolute;inset:-50%;
+  background:radial-gradient(circle,rgba(255,255,255,0.3) 0%,transparent 70%);
+  animation:pulse 3s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:0.5}50%{transform:scale(1.2);opacity:0.8}}
+.avatar-btn:active{transform:scale(.95)}
+.avatar-btn.bb{background:linear-gradient(135deg,#ff8fab,#ff6b9d)}
+.avatar-btn.papi{background:linear-gradient(135deg,#c9a7ff,#9d7fff)}
+.avatar-btn .emoji{font-size:52px;position:relative;z-index:1}
+.avatar-btn .name{font-family:'Fraunces',serif;font-size:20px;font-weight:600;position:relative;z-index:1}
+
+/* Home */
+.home-screen{padding:20px 0}
+.greeting{text-align:center;margin-bottom:30px}
+.greeting .hello{font-size:13px;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+.greeting h1{font-size:40px;line-height:1.1;margin-bottom:10px}
+.greeting h1 em{font-style:italic;color:var(--rose)}
+.greeting .sub{font-size:14px;color:#c3aecd}
+
+.room-badge{
+  text-align:center;padding:10px 20px;border-radius:25px;
+  background:var(--card);border:1px solid var(--border);
+  margin:0 auto 30px;width:fit-content;font-size:12px;color:#c3aecd;
+}
+.room-badge b{color:var(--gold);font-family:'Fraunces',serif;font-size:16px}
+
+.games-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:20px}
+.game-card{
+  padding:20px 15px;border-radius:20px;
+  background:var(--card);border:1px solid var(--border);
+  text-align:left;transition:all .3s;position:relative;overflow:hidden;
+}
+.game-card::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(circle,rgba(255,143,171,0.1) 0%,transparent 70%);
+  opacity:0;transition:opacity .3s;
+}
+.game-card:active{transform:scale(.95)}
+.game-card:hover::before{opacity:1}
+.game-card .icon{font-size:36px;margin-bottom:12px;position:relative;z-index:1}
+.game-card h3{font-size:16px;margin-bottom:6px;position:relative;z-index:1}
+.game-card p{font-size:12px;color:#c3aecd;position:relative;z-index:1}
+
+.chat-card{
+  padding:20px;border-radius:20px;
+  background:linear-gradient(135deg,rgba(42,31,61,0.9),rgba(26,16,37,0.9));
+  border:1px solid var(--border);text-align:center;
+  transition:all .3s;
+}
+.chat-card:active{transform:scale(.98)}
+.chat-card .icon{font-size:36px;margin-bottom:10px}
+.chat-card h3{font-size:18px;margin-bottom:6px}
+.chat-card p{font-size:12px;color:#c3aecd;margin-bottom:15px}
+
+/* Buttons */
+.btn-primary{
+  width:100%;padding:18px;border-radius:18px;
+  background:linear-gradient(135deg,var(--rose),var(--lav));
+  color:#2b1035;font-weight:700;font-size:16px;
+  box-shadow:0 8px 24px rgba(255,143,171,0.3);
+  transition:all .2s;
+}
+.btn-primary:active{transform:scale(.97)}
+.btn-secondary{
+  width:100%;padding:18px;border-radius:18px;
+  background:var(--card);border:1px solid var(--border);
+  font-weight:600;font-size:16px;margin-top:12px;
+  transition:all .2s;
+}
+.btn-secondary:active{transform:scale(.97)}
+
+/* Room */
+.room-screen{text-align:center;padding:40px 20px}
+.room-screen h2{font-size:32px;margin-bottom:25px}
+.code-box{
+  padding:30px;border-radius:20px;
+  background:var(--card);border:1px solid var(--border);
+  margin:25px 0;
+}
+.code-box .label{font-size:12px;color:#c3aecd;margin-bottom:10px}
+.code-box .code{font-family:'Fraunces',serif;font-size:48px;color:var(--gold);letter-spacing:10px}
+
+/* Game Screen */
+.game-screen{padding:10px 0}
+.game-header{display:flex;align-items:center;gap:15px;margin-bottom:25px}
+.game-header h2{font-size:24px}
+.game-content{min-height:60vh}
+
+/* Cards */
+.card{
+  padding:25px;border-radius:20px;
+  background:var(--card);border:1px solid var(--border);
+  margin-bottom:20px;
+}
+.card.center{text-align:center}
+
+/* Vasos */
+.vasos-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:20px 0}
+.vaso{
+  padding:15px 12px;border-radius:18px;
+  background:var(--card);border:1px solid var(--border);
+  text-align:center;
+}
+.vaso .name{font-size:12px;font-weight:700;margin-bottom:10px}
+.vaso .glass{
+  width:65px;height:85px;margin:0 auto 10px;
+  border:2px solid rgba(255,255,255,0.3);border-top:none;
+  border-radius:5px 5px 22px 22px;
+  position:relative;overflow:hidden;
+  background:rgba(255,255,255,0.03);
+}
+.vaso .liquid{
+  position:absolute;bottom:0;left:0;right:0;
+  height:50%;transition:height .3s;
+}
+.vaso .pct{font-family:'Fraunces',serif;font-size:20px;margin:8px 0}
+.vaso input[type=range]{width:100%;accent-color:var(--c)}
+
+/* Trivia */
+.trivia-card .category{font-size:11px;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+.trivia-card .question{font-family:'Fraunces',serif;font-size:24px;line-height:1.3;margin-bottom:25px}
+.trivia-options{display:flex;flex-direction:column;gap:12px}
+.trivia-option{
+  padding:16px;border-radius:14px;
+  background:var(--card);border:1px solid var(--border);
+  text-align:left;font-size:15px;font-weight:600;
+  transition:all .2s;display:flex;align-items:center;gap:12px;
+}
+.trivia-option:active{transform:scale(.98)}
+.trivia-option.selected{border-color:var(--rose);background:rgba(255,143,171,0.15)}
+.trivia-option .letter{
+  width:28px;height:28px;border-radius:8px;
+  background:rgba(255,255,255,0.1);text-align:center;line-height:28px;
+  font-size:12px;flex-shrink:0;
+}
+.trivia-option.selected .letter{background:var(--rose);color:#2b1035}
+
+/* Flip Card */
+.flip-card{perspective:1200px;margin:25px 0;cursor:pointer}
+.flip-inner{position:relative;transition:transform .7s;transform-style:preserve-3d;min-height:300px}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{
+  position:absolute;inset:0;backface-visibility:hidden;
+  border-radius:22px;padding:35px 25px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;border:1px solid var(--border);
+}
+.flip-front{background:linear-gradient(135deg,rgba(201,167,255,0.2),rgba(255,143,171,0.15))}
+.flip-front .icon{font-size:64px;margin-bottom:20px}
+.flip-front h3{font-size:28px}
+.flip-back{transform:rotateY(180deg);background:linear-gradient(135deg,#3a1f4b,#4a2140)}
+.flip-back p{font-family:'Fraunces',serif;font-size:22px;line-height:1.5}
+
+/* Reto */
+.reto-card{
+  padding:30px;border-radius:22px;
+  background:linear-gradient(135deg,rgba(255,217,160,0.15),rgba(255,143,171,0.1));
+  border:1px solid rgba(255,217,160,0.3);
+  margin-bottom:20px;
+}
+.reto-card .icon{font-size:48px;margin-bottom:15px}
+.reto-card h3{font-size:22px;line-height:1.4;margin-bottom:12px}
+.reto-card p{font-size:13px;color:#c3aecd}
+
+/* Chat */
+.chat-container{height:65vh;display:flex;flex-direction:column}
+.chat-messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px}
+.msg{
+  max-width:85%;padding:12px 16px;border-radius:18px;
+  font-size:15px;position:relative;animation:slideIn .3s;
+}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.msg.me{align-self:flex-end;background:linear-gradient(135deg,var(--rose),var(--lav));color:#2b1035}
+.msg.them{align-self:flex-start;background:var(--card);border:1px solid var(--border)}
+.msg .timer{font-size:10px;opacity:.7;margin-top:5px;display:block;text-align:right}
+.chat-input{display:flex;gap:10px;padding:15px 0}
+.chat-input input{
+  flex:1;padding:14px;border-radius:25px;
+  background:var(--card);border:1px solid var(--border);color:white;
+}
+.chat-input button{
+  width:50px;height:50px;border-radius:50%;
+  background:var(--rose);color:#2b1035;font-size:20px;
+  transition:transform .2s;
+}
+.chat-input button:active{transform:scale(.9)}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:flex-end;justify-content:center;z-index:100}
+.modal.open{display:flex}
+.modal-content{
+  width:100%;max-width:480px;
+  background:linear-gradient(180deg,#2c183c,#1e102c);
+  border-radius:28px 28px 0 0;padding:30px;max-height:85vh;overflow-y:auto;
+  animation:slideUp .4s;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+.modal-content h3{font-size:24px;margin-bottom:15px}
+.modal-content input,.modal-content textarea{
+  width:100%;padding:14px;border-radius:14px;
+  background:rgba(0,0,0,0.3);border:1px solid var(--border);
+  color:white;margin-bottom:12px;font-size:15px;
+}
+.modal-content textarea{min-height:120px;resize:vertical}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:100px;left:50%;transform:translateX(-50%);
+  background:#fff0f6;color:#3a1430;
+  padding:12px 24px;border-radius:25px;
+  font-size:14px;font-weight:700;
+  opacity:0;transition:opacity .3s;z-index:200;pointer-events:none;
+}
+.toast.show{opacity:1}
+
+/* Progress */
+.progress{height:6px;border-radius:10px;background:rgba(255,255,255,0.1);overflow:hidden;margin:20px 0}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--rose),var(--lav));border-radius:10px;transition:width .5s}
+
+/* Result */
+.result-hero{
+  text-align:center;padding:30px 20px;border-radius:24px;
+  background:radial-gradient(300px 150px at 50% 0%,rgba(255,143,171,0.2),transparent),var(--card);
+  border:1px solid var(--border);margin-bottom:20px;
+}
+.result-hero .bignum{font-family:'Fraunces',serif;font-size:64px;line-height:1;color:var(--rose)}
+.result-hero .bignum small{font-size:28px;color:#c3aecd}
+.result-hero h3{font-size:22px;margin:12px 0}
+.compare{padding:18px;border-radius:18px;background:var(--card);border:1px solid var(--border);margin-bottom:12px}
+.compare .ctop{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;margin-bottom:12px}
+.cbar{display:flex;align-items:center;gap:10px;margin:8px 0}
+.cbar .who{width:60px;font-size:11px;color:#c3aecd}
+.cbar .track{flex:1;height:10px;border-radius:10px;background:rgba(255,255,255,0.1);overflow:hidden}
+.cbar .track i{display:block;height:100%;border-radius:10px;animation:growBar 1s ease both}
+@keyframes growBar{from{width:0!important}}
+.cbar .val{width:40px;text-align:right;font-size:12px;font-weight:700}
+
+/* Dreams */
+.dream-item{
+  display:flex;align-items:center;gap:12px;padding:14px;
+  border-radius:14px;background:var(--card);border:1px solid var(--border);
+  margin-bottom:10px;
+}
+.dream-item .li-ico{font-size:24px}
+.dream-item .li-body{flex:1}
+.dream-item .li-body b{font-size:14px;display:block}
+.dream-item .li-body span{font-size:11px;color:#c3aecd}
+.check-btn{
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--border);background:rgba(255,255,255,0.05);
+  font-size:16px;transition:all .2s;
+}
+.check-btn.on{background:var(--mint);color:#123;border-color:var(--mint)}
+
+/* Input */
+.input-field{
+  width:100%;padding:14px;border-radius:14px;
+  background:rgba(0,0,0,0.3);border:1px solid var(--border);
+  color:white;font-size:15px;margin-bottom:12px;
+}
+.input-field:focus{outline:none;border-color:var(--rose)}
+
+/* Label */
+.label{display:block;font-size:12px;font-weight:700;color:#c3aecd;margin:16px 0 8px}
+
+@media (max-width:360px){
+  .login-screen h1{font-size:38px}
+  .avatar-btn{width:120px;height:120px}
+  .games-grid{gap:12px}
+}
+</style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<div class="app">
+  <header>
+    <div class="logo">nuestra órbita</div>
+    <div id="header-actions"></div>
+  </header>
+  <main id="view"></main>
+</div>
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const sb=window.supabase.createClient('https://xrqgizgtjbchuscmcazt.supabase.co','sb_publishable_k4DJMSR1h0QRJuymVE7UMA_rP2gyFNK');
+const $=s=>document.querySelector(s);
+let currentUser=null,currentRoom=null,chatChannel=null;
+
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function setHeader(html){$('#header-actions').innerHTML=html;}
+function show(html){$('#view').innerHTML=html;window.scrollTo(0,0);}
+function openModal(html){$('#modal').innerHTML=`<div class="modal-content">${html}</div>`;$('#modal').classList.add('open');}
+function closeModal(){$('#modal').classList.remove('open');}
+
+// Partículas
+const particles=$('#particles');
+for(let i=0;i<20;i++){
+  const p=document.createElement('div');p.className='particle';
+  p.textContent=['♡','✦','⭐','💫'][Math.floor(Math.random()*4)];
+  p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;font-size:${15+Math.random()*20}px;color:${['#ff8fab','#c9a7ff','#ffd9a0','#8fe3c0'][Math.floor(Math.random()*4)]};animation-delay:${Math.random()*20}s;animation-duration:${15+Math.random()*15}s`;
+  particles.appendChild(p);
+}
+
+// LOGIN
+function renderLogin(){
+  currentUser=null;currentRoom=null;
+  if(chatChannel){chatChannel.unsubscribe();chatChannel=null;}
+  setHeader('');
+  show(`
+    <div class="login-screen">
+      <h1>Hola,<br><em>mi amor.</em></h1>
+      <p>¿Quién eres hoy?</p>
+      <div class="avatars">
+        <button class="avatar-btn bb" onclick="loginAs('bb')">
+          <span class="emoji">💗</span>
+          <span class="name">BB</span>
+        </button>
+        <button class="avatar-btn papi" onclick="loginAs('papi')">
+          <span class="emoji">💙</span>
+          <span class="name">Papi</span>
+        </button>
+      </div>
+    </div>
+  `);
+}
+function loginAs(who){currentUser=who;renderRoomChoice();}
+
+// ROOM CHOICE
+function renderRoomChoice(){
+  setHeader(`<button class="btn-back" onclick="renderLogin()">←</button>`);
+  show(`
+    <div class="login-screen" style="min-height:auto;padding:60px 0">
+      <h2 style="font-size:36px;margin-bottom:12px">Hola, <em style="font-style:italic;color:var(--rose)">${currentUser==='bb'?'BB':'Papi'}</em></h2>
+      <p style="color:#c3aecd;margin-bottom:50px">¿Vamos a jugar?</p>
+      <button class="btn-primary" onclick="createRoom()">✨ Crear nueva sala</button>
+      <button class="btn-secondary" onclick="showJoinModal()">🔑 Unirme a una sala</button>
+    </div>
+  `);
+}
+
+async function createRoom(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code='';for(let i=0;i<6;i++)code+=chars[Math.floor(Math.random()*chars.length)];
+  const {data,error}=await sb.from('rooms').insert([{room_code:code,player_a:null,player_b:null,game_state:{}}]).select().single();
+  if(error){toast('Error: '+error.message);return;}
+  currentRoom=data;
+  await joinChat(code);
+  await updatePlayer();
+  renderRoomConnected();
+}
+
+function showJoinModal(){
+  openModal(`
+    <h3>Unirse a una sala</h3>
+    <p style="color:#c3aecd;font-size:14px;margin-bottom:20px">Pide el código de 6 letras a tu pareja.</p>
+    <input type="text" id="joinCode" placeholder="Ej: ABC123" maxlength="6" style="text-transform:uppercase;text-align:center;font-size:28px;letter-spacing:6px">
+    <button class="btn-primary" style="margin-top:20px" onclick="joinRoom()">Unirme</button>
+  `);
+}
+
+async function joinRoom(){
+  const code=$('#joinCode').value.trim().toUpperCase();
+  if(code.length!==6){toast('Código debe tener 6 caracteres');return;}
+  const {data,error}=await sb.from('rooms').select('*').eq('room_code',code).single();
+  if(error||!data){toast('Sala no encontrada');return;}
+  currentRoom=data;closeModal();
+  await joinChat(code);await updatePlayer();
+  renderRoomConnected();
+}
+
+async function updatePlayer(){
+  if(!currentRoom)return;
+  const update={};
+  if(currentUser==='bb')update.player_a={name:'BB',joined:Date.now()};
+  else update.player_b={name:'Papi',joined:Date.now()};
+  await sb.from('rooms').update(update).eq('room_code',currentRoom.room_code);
+}
+
+async function joinChat(code){
+  if(chatChannel)chatChannel.unsubscribe();
+  chatChannel=sb.channel(`chat-${code}`).on('broadcast',{event:'msg'},p=>receiveMsg(p.payload)).subscribe();
+}
+
+function renderRoomConnected(){
+  const other=currentUser==='bb'?currentRoom.player_b:currentRoom.player_a;
+  const otherName=currentUser==='bb'?'Papi':'BB';
+  setHeader(`<button class="btn-back" onclick="renderLogin()">←</button>`);
+  show(`
+    <div class="room-screen">
+      <h2>Sala creada</h2>
+      <div class="code-box">
+        <div class="label">Tu código:</div>
+        <div class="code">${currentRoom.room_code}</div>
+        <div class="label" style="margin-top:12px">Compártelo con ${otherName}</div>
+      </div>
+      ${other?`<p style="color:var(--mint);margin-bottom:25px;font-size:16px">✓ ¡${otherName} está aquí!</p><button class="btn-primary" onclick="renderHome()">Empezar a jugar</button>`:`<p style="color:#c3aecd;font-size:14px">Esperando a ${otherName}... ⏳</p>`}
+    </div>
+  `);
+}
+
+// HOME
+function renderHome(){
+  if(!currentRoom){renderLogin();return;}
+  setHeader(`<button class="btn-back" onclick="renderLogin()">🚪</button>`);
+  const name=currentUser==='bb'?'BB':'Papi';
+  const emoji=currentUser==='bb'?'💗':'💙';
+  show(`
+    <div class="home-screen">
+      <div class="greeting">
+        <div class="hello">${emoji} ${name}</div>
+        <h1>¿Qué <em>jugamos</em>?</h1>
+        <div class="sub">Un juego, una pregunta, un gesto.</div>
+      </div>
+      <div class="room-badge"><b>Sala ${currentRoom.room_code}</b></div>
+      
+      <div class="games-grid">
+        <button class="game-card" onclick="startVasos()">
+          <div class="icon">🥂</div>
+          <h3>Vasos del Amor</h3>
+          <p>¿Cuánto me das?</p>
+        </button>
+        <button class="game-card" onclick="startTrivia()">
+          <div class="icon"></div>
+          <h3>Trivia</h3>
+          <p>¿Cuánto me conoces?</p>
+        </button>
+        <button class="game-card" onclick="startVerdad()">
+          <div class="icon"></div>
+          <h3>Verdad</h3>
+          <p>Preguntas profundas</p>
+        </button>
+        <button class="game-card" onclick="startReto()">
+          <div class="icon">🎯</div>
+          <h3>Reto del Día</h3>
+          <p>Un gesto hoy</p>
+        </button>
+        <button class="game-card" onclick="startCapsula()">
+          <div class="icon">💌</div>
+          <h3>Cápsula</h3>
+          <p>Carta al futuro</p>
+        </button>
+        <button class="game-card" onclick="startSuenos()">
+          <div class="icon">🗺️</div>
+          <h3>Sueños</h3>
+          <p>Lista de deseos</p>
+        </button>
+      </div>
+
+      <button class="chat-card" onclick="startChat()">
+        <div class="icon">💬</div>
+        <h3>Chat Secreto</h3>
+        <p>Mensajes que se autodestruyen en 20 segundos</p>
+      </button>
+    </div>
+  `);
+}
+
+// VASOS
+const QUALITIES=[
+  {n:'Paciencia',c:'#8fe3c0'},{n:'Cariño',c:'#ff8fab'},
+  {n:'Escucha',c:'#8fb8ff'},{n:'Humor',c:'#ffd9a0'},
+  {n:'Confianza',c:'#c9a7ff'},{n:'Admiración',c:'#7fe0e0'}
+];
+let vasoAnswers={};
+
+function startVasos(){
+  setHeader(`<button class="btn-back" onclick="renderHome()">←</button>`);
+  show(`
+    <div class="game-screen">
+      <div class="game-header"><h2>🥂 Vasos del Amor</h2></div>
+      <div class="game-content">
+        <div class="card center">
+          <div style="font-size:64px;margin-bottom:20px">🥂</div>
+          <h3 style="font-size:26px;margin-bottom:12px">¿Cuánto de mí<br>hay en tu día?</h3>
+          <p style="color:#c3aecd;font-size:14px;margin-bottom:25px">Llena los vasos según cuánto sientes que tu pareja te da de cada cualidad.</p>
+          <button class="btn-primary" onclick="vasosFill()">Empezar</button>
+        </div>
+      </div>
+    </div>
+  `);
+}
+
+function vasosFill(){
+  vasoAnswers={};
+  show(`
+    <div class="game-screen">
+      <div class="game-header"><h2>🥂 Vasos del Amor</h2></div>
+      <div class="game-content">
+        <div class="vasos-grid">
+          ${QUALITIES.map((q,i)=>`
+            <div class="vaso" style="--c:${q.c}">
+              <div class="name">${q.n}</div>
+              <div class="glass"><div class="liquid" id="liq${i}" style="height:50%;background:${q.c}"></div></div>
+              <div class="pct" id="pct${i}" style="color:${q.c}">50%</div>
+              <input type="range" min="0" max="100" value="50" oninput="updateVaso(${i},this.value,'${q.c}')">
+            </div>
+          `).join('')}
+        </div>
+        <button class="btn-primary" onclick="sendVasos()">Enviar a mi pareja</button>
+      </div>
+    </div>
+  `);
+}
+
+function updateVaso(i,val,color){
+  $(`#liq${i}`).style.height=val+'%';
+  $(`#pct${i}`).textContent=val+'%';
+  vasoAnswers[QUALITIES[i].n]=parseInt(val);
+}
+
+async function sendVasos(){
+  QUALITIES.forEach(q=>{if(vasoAnswers[q.n]===undefined)vasoAnswers[q.n]=50;});
+  const update={};
+  if(currentUser==='bb')update.player_a={vasos:vasoAnswers};
+  else update.player_b={vasos:vasoAnswers};
+  await sb.from('rooms').update(update).eq('room_code',currentRoom.room_code);
+  toast('Vasos enviados. Esperando... ⏳');
+  setTimeout(()=>{
+    show(`
+      <div class="game-screen">
+        <div class="game-header"><h2> Vasos del Amor</h2></div>
+        <div class="game-content">
+          <div class="card center">
+            <div style="font-size:64px;margin-bottom:20px">⏳</div>
+            <h3 style="font-size:24px;margin-bottom:12px">Esperando a tu pareja</h3>
+            <p style="color:#c3aecd;font-size:14px;margin-bottom:25px">Cuando termine, verán los resultados juntos.</p>
+            <button class="btn-primary" onclick="checkVasos()">Verificar</button>
+            <button class="btn-secondary" onclick="renderHome()">Volver al inicio</button>
+          </div>
+        </div>
+      </div>
+    `);
+  },2000);
+}
+
+async function checkVasos(){
+  const {data}=await sb.from('rooms').select('*').eq('room_code',currentRoom.room_code).single();
+  if(data)currentRoom=data;
+  const other=currentUser==='bb'?currentRoom.player_b:currentRoom.player_a;
+  if(other&&other.vasos){
+    vasoAnswers.other=other.vasos;
+    vasosResult();
+  }else{
+    toast('Tu pareja aún no termina. Espera un momento.');
+  }
+}
+
+function vasosResult(){
+  const A=vasoAnswers;
+  const B=vasoAnswers.other;
+  const nameA=currentUser==='bb'?'BB':'Papi';
+  const nameB=currentUser==='bb'?'Papi':'BB';
+  let totalDiff=0;
+  const rows=QUALITIES.map(q=>{
+    const a=A[q.n]||50,b=B[q.n]||50;
+    totalDiff+=Math.abs(a-b);
+    const gap=b-a;
+    const hint=Math.abs(gap)<=10?'En la misma frecuencia 🎶':gap>0?`${nameB} lo siente más presente`:`${nameA} lo siente más presente`;
+    return `<div class="compare">
+      <div class="ctop"><span>${q.n}</span>
+        <span style="font-size:11px;color:var(--gold)">${Math.abs(gap)<=10?'✨ Sintonía':gap>0?`+${gap} ${nameB}`:`+${-gap} ${nameA}`}</span>
+      </div>
+      <div class="cbar"><span class="who">${nameA}</span><div class="track"><i style="width:${a}%;background:${q.c}"></i></div><span class="val" style="color:${q.c}">${a}%</span></div>
+      <div class="cbar"><span class="who">${nameB}</span><div class="track"><i style="width:${b}%;background:var(--lav)"></i></div><span class="val" style="color:var(--lav)">${b}%</span></div>
+      <p style="font-size:12px;color:#c3aecd;margin-top:10px">${hint}</p>
+    </div>`;
+  }).join('');
+  const sintonia=Math.round(100-(totalDiff/QUALITIES.length)/2);
+  show(`
+    <div class="game-screen">
+      <div class="game-header"><h2>🥂 Vasos del Amor</h2></div>
+      <div class="game-content">
+        <div class="result-hero">
+          <div style="font-size:12px;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px">Su sintonía</div>
+          <div class="bignum">${sintonia}<small>%</small></div>
+          <h3>${sintonia>=80?'En la misma órbita 💫':sintonia>=55?'Encontrándose 💗':'Conversando 🌱'}</h3>
+          <p style="font-size:13px;color:#c3aecd">No es una calificación. Es una invitación.</p>
+        </div>
+        ${rows}
+        <button class="btn-primary" onclick="startVasos()">Otra vez</button>
+        <button class="btn-secondary" onclick="renderHome()">A inicio</button>
+      </div>
+    </div>
+  `);
+}
+
+// TRIVIA
+const TRIVIA=[
+  {c:'Gustos',q:'¿Cuál es mi comida favorita?',o:['Pizza','Sushi','Tacos','Pasta']},
+  {c:'Gustos',q:'¿Qué prefiero para una noche perfecta?',o:['Cine en casa','Salir','Cena tranquila','Aventura']},
+  {c:'Gustos',q:'¿Cuál es mi dulce débil?',o:['Chocolate','Helado','Fresas','Galletas']},
+  {c:'Nosotros',q:'¿Cuál fue mi primera impresión de ti?',o:['Timidez','Simpatía','Curiosidad','Amor a primera vista']},
+  {c:'Nosotros',q:'¿Qué detalle nuestro me hace sonreír?',o:['Apodos','Nuestra canción','Un viaje','Un mensaje']},
+  {c:'Nosotros',q:'¿Cómo demuestro que me gusta alguien?',o:['Actos de servicio','Palabras','Regalitos','Contacto físico']}
+];
+let triviaState={idx:0,questions:[],answers:[],picked:null};
+
+function startTrivia(){
+  setHeader(`<button class="btn-back" onclick="renderHome()">←</button>`);
+  triviaState={idx:0,questions:[...TRIVIA].sort(()=>Math.random()-.5).slice(0,5),answers:[],picked:null};
+  renderTriviaQuestion();
+}
+
+function renderTriviaQuestion(){
+  if(triviaState.idx>=triviaState.questions.length){
+    triviaResult();return;
+  }
+  const q=triviaState.questions[triviaState.idx];
+  triviaState.picked=null;
+  show(`
+    <div class="game-screen">
+      <div class="game-header"><h2> Trivia</h2></div>
+      <div class="game-content">
+        <div class="card">
+          <div class="trivia-card">
+            <div class="category">${q.c} · Pregunta ${triviaState.idx+1} de ${triviaState.questions.length}</div>
+            <div class="question">${q.q}</div>
+            <div class="trivia-options">
+              ${q.o.map((o,i)=>`<button class="trivia-option" onclick="selectTrivia(${i},'${o.replace(/'/g,"\\'")}')"><span class="letter">${'ABCD'[i]}</span>${o}</button>`).join('')}
+            </div>
+          </div>
+        </div>
+        <button class="btn-primary" id="triviaNext" disabled onclick="nextTrivia()">Siguiente</button>
+      </div>
+    </div>
+  `);
+}
+
+function selectTrivia(i,answer){
+  triviaState.picked={index:i,answer};
+  document.querySelectorAll('.trivia-option').forEach((b,idx)=>{
+    b.classList.toggle('selected',idx===i);
+  });
+  $('#triviaNext').disabled=false;
+}
+
+function nextTrivia(){
+  if(!triviaState.picked)return;
+  triviaState.answers.push(triviaState.picked);
+  triviaState.idx++;
+  renderTriviaQuestion();
+}
+
+function triviaResult(){
+  const score=triviaState.answers.filter(a=>a.index===0).length;
+  show(`
+    <div class="game-screen">
+      <div class="game-header"><h2>🧠 Trivia</h2></div>
+      <div class="game-content">
+        <div class="result-hero">
+          <div style="font-size:12px;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px">Resultado</div>
+          <div class="bignum">${score}<small>/${triviaState.questions.length}</small></div>
+          <h3>${score>=4?'Se leen la mente ✨':score>=2?'Se conocen bien 💗':'Mucho por descubrir 🎁'}</h3>
+        </div>
+        <button class="btn-primary" onclick="startTrivia()">Otra ronda</button>
+        <button class="btn-secondary" onclick="renderHome()">A inicio</button>
+      </div>
+    </div>
+  `);
+}
+
+// VERDAD
+const PROMPTS=[
+  ['Profundo','¿Cuál es el recuerdo de nosotros que guardas como un tesoro?'],
+  ['Profundo','¿Qué necesitas de mí cuando tienes un día horrible?'],
+  ['Profundo','¿En qué momento pensaste «quiero estar con esta persona»?'],
+  ['Suave','Si pudiéramos viajar mañana, ¿a dónde me llevarías?'],
+  ['Suave','¿Cuál es mi costumbre tonta que te encanta?'],
+  ['Suave','¿Qué apodo secreto te gustaría ponerme?'],
+  ['Travieso','¿Cuál es el pensamiento más coqueto que has tenido hoy?'],
+  ['Travieso','¿Qué parte de mi cuerpo te detienes a mirar?'],
+  ['Travieso','Si hoy fuera sin reglas, ¿qué propondrías?']
+];
+
+function startVerdad(){
+  setHeader(`<button class="btn-back" onclick="renderHome()">←</button>`);
+  const p=PROMPTS[Math.floor(Math.random()*PROMPTS.length)];
+  show(`
+    <div class="game-screen">
+      <div class="game-header"><h2>💬 Verdad o Confidencia</h2></div>
+      <div class="game-content">
+        <div class="flip-card" id="flipCard" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div class="icon">💌</div>
+              <h3>Hay algo<br>que quiero saber</h3>
+              <p style="color:#c3aecd;font-size:14px;margin-top:20px">Toca para ver la pregunta</p>
+            </div>
+            <div class="flip-back">
+              <div style="font-size:12px;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:15px">${p[0]}</div>
+              <p>${p[1]}</p>
+            </div>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="startVerdad()">Otra pregunta</button>
+        <button class="btn-secondary" onclick="renderHome()">Volver al inicio</button>
+      </div>
+    </div>
+  `);
+}
+
+// RETO
+const RETOS=[
+  {i:'🎙️',t:'Envíale un audio de 30 segundos diciéndole tres cosas que admiras.'},
+  {i:'📸',t:'Mándale la foto de un momento de hoy que te hizo sonreír.'},
+  {i:'💌',t:'Escribe: «Hoy me di cuenta de que te quiero cuando…». Envíasela.'},
+  {i:'🎵',t:'Compartan una canción. Escúchenla a la misma hora.'},
+  {i:'🤗',t:'Abrácense 20 segundos sin hablar. O envíense un abrazo en voz alta.'}
+];
+
+function startReto(){
+  setHeader(`<button class="btn-back" onclick="renderHome()">←</button>`);
+  const r=RETOS[Math.floor(Math.random()*RETOS.length)];
+  show(`
+    <div class="game-screen">
+      <div class="game-header"><h2>🎯 Reto del Día</h2></div>
+      <div class="game-content">
+        <div class="reto-card">
+          <div class="icon">${r.i}</div>
+          <h3>${r.t}</h3>
+          <p>No tiene que ser perfecto. Tiene que ser suyo.</p>
+        </div>
+        <button class="btn-primary" onclick="toast('¡Reto cumplido! 💕')">Lo cumplimos</button>
+        <button class="btn-secondary" onclick="renderHome()">Volver al inicio</button>
+      </div>
+    </div>
+  `);
+}
+
+// CÁPSULA
+function startCapsula(){
+  setHeader(`<button class="btn-back" onclick="renderHome()">←</button>`);
+  show(`
+    <div class="game-screen">
+      <div class="game-header"><h2>💌 Cápsula del Tiempo</h2></div>
+      <div class="game-content">
+        <div class="card">
+          <div style="font-size:64px;text-align:center;margin-bottom:20px">💌</div>
+          <h3 style="text-align:center;font-size:24px;margin-bottom:20px">Carta al futuro</h3>
+          <label class="label">Título</label>
+          <input type="text" id="capTitle" class="input-field" placeholder="Ej: Cuando leas esto…">
+          <label class="label">Nuestra carta</label>
+          <textarea id="capBody" class="input-field" placeholder="Hola, nosotros del futuro…"></textarea>
+          <label class="label">¿Cuándo se abre?</label>
+          <input type="date" id="capDate" class="input-field">
+          <button class="btn-primary" style="margin-top:20px" onclick="saveCapsula()">Sellar carta</button>
+        </div>
+      </div>
+    </div>
+  `);
+}
+async function saveCapsula(){
+  const title=$('#capTitle').value.trim();
+  const body=$('#capBody').value.trim();
+  const date=$('#capDate').value;
+  if(!title||!body||!date){toast('Completa todos los campos');return;}
+  const capsule={id:Date.now().toString(36),title,body,unlock:date,created:new Date().toISOString()};
+  const capsules=currentRoom.game_state?.capsules||[];
+  capsules.push(capsule);
+  await sb.from('rooms').update({game_state:{...currentRoom.game_state,capsules}}).eq('room_code',currentRoom.room_code);
+  toast('Cápsula sellada 💌');
+  renderHome();
+}
+
+// SUEÑOS
+function startSuenos(){
+  setHeader(`<button class="btn-back" onclick="renderHome()">←</button>`);
+  const dreams=currentRoom.game_state?.dreams||[];
+  show(`
+    <div class="game-screen">
+      <div class="game-header"><h2>🗺️ Sueños</h2></div>
+      <div class="game-content">
+        <div class="card">
+          <h3 style="font-size:20px;margin-bottom:15px">¿Qué queremos vivir?</h3>
+          <input type="text" id="dreamInput" class="input-field" placeholder="Ej: Ver el amanecer en una playa">
+          <button class="btn-primary" onclick="addDream()">Añadir sueño</button>
+        </div>
+        <div id="dreamsList">
+          ${dreams.length?dreams.map((d,i)=>`
+            <div class="dream-item">
+              <span class="li-ico">${d.done?'':'⭐'}</span>
+              <div class="li-body"><b>${d.text}</b><span>${d.done?'¡Lo vivimos!':'Esperando'}</span></div>
+              <button class="check-btn ${d.done?'on':''}" onclick="toggleDream(${i})">${d.done?'✓':'♡'}</button>
+            </div>
+          `).join(''):'<p style="text-align:center;color:#c3aecd;padding:20px">Aún no hay sueños. ¡Anoten el primero!</p>'}
+        </div>
+      </div>
+    </div>
+  `);
+}
+async function addDream(){
+  const v=$('#dreamInput').value.trim();
+  if(!v){toast('Escribe un sueño');return;}
+  const dreams=currentRoom.game_state?.dreams||[];
+  dreams.push({id:Date.now().toString(36),text:v,done:false});
+  await sb.from('rooms').update({game_state:{...currentRoom.game_state,dreams}}).eq('room_code',currentRoom.room_code);
+  toast('Sueño añadido 🗺️');
+  startSuenos();
+}
+async function toggleDream(i){
+  const dreams=currentRoom.game_state?.dreams||[];
+  dreams[i].done=!dreams[i].done;
+  await sb.from('rooms').update({game_state:{...currentRoom.game_state,dreams}}).eq('room_code',currentRoom.room_code);
+  if(dreams[i].done)toast('¡Lo vivimos! 🏁');
+  startSuenos();
+}
+
+// CHAT
+function startChat(){
+  setHeader(`<button class="btn-back" onclick="renderHome()">←</button>`);
+  show(`
+    <div class="game-screen">
+      <div class="game-header"><h2>💬 Chat Secreto</h2></div>
+      <div class="game-content">
+        <p style="text-align:center;color:#c3aecd;font-size:13px;margin-bottom:20px">🔒 Los mensajes se autodestruyen en 20 segundos. No hay historial.</p>
+        <div class="chat-container">
+          <div class="chat-messages" id="chatMsgs"></div>
+          <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Escribe algo secreto..." onkeypress="if(event.key==='Enter')sendMsg()">
+            <button onclick="sendMsg()">➤</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `);
+}
+
+function sendMsg(){
+  const input=$('#chatInput');
+  const text=input.value.trim();
+  if(!text)return;
+  const msg={id:Date.now().toString(36),text,sender:currentUser};
+  chatChannel.send({type:'broadcast',event:'msg',payload:msg});
+  input.value='';
+  displayMsg(msg);
+}
+
+function receiveMsg(msg){displayMsg(msg);}
+
+function displayMsg(msg){
+  const container=$('#chatMsgs');
+  if(!container)return;
+  const isMe=msg.sender===currentUser;
+  const div=document.createElement('div');
+  div.className=`msg ${isMe?'me':'them'}`;
+  div.innerHTML=`${msg.text}<span class="timer" id="timer-${msg.id}">20s</span>`;
+  container.appendChild(div);
+  container.scrollTop=container.scrollHeight;
+  let timeLeft=20;
+  const timer=setInterval(()=>{
+    timeLeft--;
+    const timerEl=document.getElementById(`timer-${msg.id}`);
+    if(timerEl)timerEl.textContent=timeLeft+'s';
+    if(timeLeft<=0){
+      clearInterval(timer);
+      div.style.opacity='0';div.style.transition='opacity .5s';
+      setTimeout(()=>div.remove(),500);
+    }
+  },1000);
+}
+
+window.addEventListener('beforeunload',()=>{if(chatChannel)chatChannel.unsubscribe();});
+
+renderLogin();
+</script>
+</body>
+</html>
